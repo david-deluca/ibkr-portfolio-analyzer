@@ -20,7 +20,11 @@ def run_performance():
     print_performance_summary(returns)
 
 def run_projection(monthly_contribution, annual_return, years):
-    current_value = 18192.48  # from your last --summary total
+    ib = connect()
+    summary = get_portfolio_summary(ib)
+    current_value = sum(item["market_value"] for item in summary)
+    ib.disconnect()
+
     results = project_growth(current_value, monthly_contribution, annual_return, years)
     print_projection(results, current_value)
 
