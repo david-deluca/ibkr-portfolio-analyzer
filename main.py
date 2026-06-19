@@ -19,12 +19,8 @@ def run_performance():
     plot_performance(returns)
     print_performance_summary(returns)
 
-def run_projection():
+def run_projection(monthly_contribution, annual_return, years):
     current_value = 18192.48  # from your last --summary total
-    monthly_contribution = 300
-    annual_return = 0.07
-    years = 20
-
     results = project_growth(current_value, monthly_contribution, annual_return, years)
     print_projection(results, current_value)
 
@@ -33,6 +29,9 @@ if __name__ == "__main__":
     parser.add_argument("--summary", action="store_true", help="Show portfolio summary")
     parser.add_argument("--performance", action="store_true", help="Plot performance vs benchmark")
     parser.add_argument("--projection", action="store_true", help="Show growth projection")
+    parser.add_argument("--monthly", type=float, default=300, help="Monthly contribution")
+    parser.add_argument("--return-rate", type=float, default=0.07, help="Expected annual return (e.g. 0.07 for 7%%)")
+    parser.add_argument("--years", type=int, default=20, help="Projection horizon in years")
     args = parser.parse_args()
 
     if args.summary:
@@ -40,6 +39,6 @@ if __name__ == "__main__":
     elif args.performance:
         run_performance()
     elif args.projection:
-        run_projection()
+        run_projection(args.monthly, args.return_rate, args.years)
     else:
         print("Use --summary, --performance, or --projection to run the respective analysis.")
