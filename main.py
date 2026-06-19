@@ -1,7 +1,7 @@
 import argparse
 from src.connector import connect
 from src.portfolio import get_portfolio_summary, print_portfolio_summary
-from src.benchmark import get_historical_data, calculate_returns
+from src.benchmark import get_historical_data, calculate_returns, print_performance_summary
 from src.benchmark_plot import plot_performance
 
 def run_summary():
@@ -16,6 +16,7 @@ def run_performance():
     data = get_historical_data(tickers)
     returns = calculate_returns(data)
     plot_performance(returns)
+    print_performance_summary(returns)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="IBKR Portfolio Analyzer")

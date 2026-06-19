@@ -16,3 +16,19 @@ def calculate_returns(data):
     """
     normalized = (data / data.iloc[0]) * 100
     return normalized
+def print_performance_summary(returns):
+    """
+    Prints the final return percentage for each ticker,
+    using the last valid (non-NaN) value per column.
+    """
+    print("\n" + "="*40)
+    print("PERFORMANCE SUMMARY (period total)")
+    print("="*40)
+
+    for ticker in returns.columns:
+        last_valid_value = returns[ticker].dropna().iloc[-1]
+        change = last_valid_value - 100
+        sign = "+" if change >= 0 else ""
+        print(f"{ticker:<10} | {sign}{change:.2f}%")
+
+    print("="*40)
