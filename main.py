@@ -1,6 +1,8 @@
 import argparse
 from src.connector import connect
 from src.portfolio import get_portfolio_summary, print_portfolio_summary
+from src.benchmark import get_historical_data, calculate_returns
+from src.benchmark_plot import plot_performance
 
 def run_summary():
     ib = connect()
@@ -8,12 +10,22 @@ def run_summary():
     print_portfolio_summary(summary)
     ib.disconnect()
 
+    
+def run_performance():
+    tickers = ["IWDA.AS", "EIMI.L", "^GSPC"]
+    data = get_historical_data(tickers)
+    returns = calculate_returns(data)
+    plot_performance(returns)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="IBKR Portfolio Analyzer")
     parser.add_argument("--summary", action="store_true", help="Show portfolio summary")
+    parser.add_argument("--performance", action="store_true", help="Plot performance vs benchmark")
     args = parser.parse_args()
 
     if args.summary:
         run_summary()
+    elif args.performance:
+        run_performance()
     else:
-        print("Use --summary to see your portfolio.")
+        print("Use --summary or --performance")
