@@ -16,7 +16,29 @@ def get_portfolio_summary(ib):
         })
     return summary
 
+def plot_distribution(summary, output_filepath="output/distribution.png"):
+    """
+    Generates a pie chart showing portfolio distribution by market value.
+    """
+    import matplotlib.pyplot as plt
 
+    labels = [item["symbol"] for item in summary]
+    values = [item["market_value"] for item in summary]
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.pie(
+        values,
+        labels=labels,
+        autopct="%1.1f%%",
+        startangle=90,
+        wedgeprops={"edgecolor": "white", "linewidth": 1.5}
+    )
+    ax.set_title("Portfolio Distribution by Market Value")
+
+    plt.tight_layout()
+    plt.savefig(output_filepath)
+    print(f"Chart saved to {output_filepath}")
+    
 def print_portfolio_summary(summary):
     """
     Prints a formatted table of the portfolio summary.
@@ -38,3 +60,5 @@ def print_portfolio_summary(summary):
     print("-"*70)
     print(f"{'TOTAL':<8} | {'':>6} | {'':>9} | {'':>8} | {total_value:>10.2f} | {total_pnl:>8.2f}")
     print("="*70)
+
+    
