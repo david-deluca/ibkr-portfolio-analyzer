@@ -5,6 +5,7 @@ from src.benchmark import get_historical_data, calculate_returns, print_performa
 from src.benchmark_plot import plot_performance
 from src.projection import project_growth, print_projection
 from src.portfolio import get_portfolio_summary, print_portfolio_summary, plot_distribution
+from src.dashboard import plot_dashboard
 
 def run_summary():
     ib = connect()
@@ -29,6 +30,12 @@ def run_projection(monthly_contribution, annual_return, years):
     results = project_growth(current_value, monthly_contribution, annual_return, years)
     print_projection(results, current_value)
 
+def run_dashboard():
+    ib = connect()
+    summary = get_portfolio_summary(ib)
+    ib.disconnect()
+    plot_dashboard(summary)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="IBKR Portfolio Analyzer")
     parser.add_argument("--summary", action="store_true", help="Show portfolio summary")
@@ -38,6 +45,7 @@ if __name__ == "__main__":
     parser.add_argument("--return-rate", type=float, default=0.07, help="Expected annual return (e.g. 0.07 for 7%%)")
     parser.add_argument("--years", type=int, default=20, help="Projection horizon in years")
     parser.add_argument("--distribution", action="store_true", help="Show portfolio distribution chart")
+    parser.add_argument("--dashboard", action="store_true", help="Generate full portfolio dashboard")
     args = parser.parse_args()
 
     if args.summary:
@@ -51,5 +59,7 @@ if __name__ == "__main__":
         summary = get_portfolio_summary(ib)
         plot_distribution(summary)
         ib.disconnect()
+    elif args.dashboard:
+        run_dashboard()
     else:
-        print("Use --summary, --performance, --projection, or --distribution to run the respective analysis.")
+        print("Use --summary, --performance, --projection, --distribution, or --dashboard to run the respective analysis.")
